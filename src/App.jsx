@@ -2,6 +2,44 @@ import "./App.css";
 import Card from "./components/card";
 
 function App() {
+  const participants = [
+    {
+      id: 0,
+      name: "john",
+      email: "john@wp.en",
+      phone: "+4511223344",
+      birthdate: "01011990",
+    },
+    {
+      id: 1,
+      name: "adam",
+      email: "adam@wp.en",
+      phone: "+4555667788",
+      birthdate: "02011990",
+    },
+  ];
+
+  ("use strict");
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll(".needs-validation");
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach((form) => {
+    form.addEventListener(
+      "submit",
+      (event) => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        form.classList.add("was-validated");
+      },
+      false
+    );
+  });
+
   return (
     <>
       <div className="position-absolute min-vh-100 min-vw-100 black-fill"></div>
@@ -31,8 +69,8 @@ function App() {
                     </span>
                   </div>
                 </div>
-                <hr className="m-0" />
-                <div className="px-5 pt-4 pb-5">
+                <hr className="m-0 dotted" />
+                <form className="px-5 pt-4 pb-5 needs-validation" noValidate>
                   <div className="mb-4">
                     <label
                       for="nameFormControl"
@@ -41,11 +79,13 @@ function App() {
                       Your name
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       className="form-control"
                       id="nameFormControl"
                       placeholder="Full name"
+                      required
                     />
+                    <div className="invalid-feedback">Please enter name.</div>
                   </div>
                   <div className="mb-4">
                     <label
@@ -59,7 +99,9 @@ function App() {
                       className="form-control"
                       id="emailFormControl"
                       placeholder="Email"
+                      required
                     />
+                    <div className="invalid-feedback">Please enter email.</div>
                   </div>
                   <div className="mb-4">
                     <label
@@ -69,11 +111,16 @@ function App() {
                       Phone number
                     </label>
                     <input
-                      type="email"
+                      type="tel"
                       className="form-control"
                       id="phoneFormControl"
                       placeholder="Phone"
+                      pattern="[0-9]{8}"
+                      required
                     />
+                    <div className="invalid-feedback">
+                      Please enter phone number.
+                    </div>
                   </div>
                   <div className="mb-4">
                     <label
@@ -83,11 +130,15 @@ function App() {
                       Your birthdate
                     </label>
                     <input
-                      type="email"
+                      type="date"
                       className="form-control"
                       id="birthdateFormControl"
                       placeholder="Birthdate"
+                      required
                     />
+                    <div className="invalid-feedback">
+                      Please enter birthdate.
+                    </div>
                   </div>
                   <button
                     type="submit"
@@ -96,15 +147,45 @@ function App() {
                     <span className="align-middle">Add participant</span>
                     <img src="src\assets\add.svg" className="ms-3"></img>
                   </button>
-                </div>
+                </form>
               </Card>
             </div>
             <div className="col-3">
-              <Card title="Your participants" heading="0 participants">
-                <hr className="m-0" />
-                <div className="h-100 d-flex flex-column">
-                  <div className="px-5 pt-4 pb-5 flex-grow-1">
-                    <span>No participants added...</span>
+              <Card
+                title="Your participants"
+                heading={`${participants.length} participants`}
+              >
+                <hr className="m-0 dotted" />
+                <div className="h-100 d-flex flex-column fw-semibold">
+                  <div className="pt-3 flex-grow-1">
+                    <span className="px-5 pt-4 pb-5 d-none">
+                      No participants added...
+                    </span>
+                    <div className="">
+                      {participants.map((participant) => (
+                        <div key={participant.id}>
+                          <div className="px-5 d-flex flex-wrap">
+                            <div className="w-100 name">{participant.name}</div>
+                            <div className="w-50 opacity-50">Birthdate:</div>
+                            <div className="w-50 opacity-50 text-end">
+                              {participant.birthdate}
+                            </div>
+                            <div className="w-50 opacity-50">Email:</div>
+                            <div className="w-50 opacity-50 text-end">
+                              {participant.email}
+                            </div>
+                            <div className="w-50 opacity-50">
+                              {" "}
+                              Phone number:
+                            </div>
+                            <div className="w-50 opacity-50 text-end">
+                              {participant.phone}
+                            </div>
+                          </div>
+                          <hr></hr>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                   <div className="d-grid">
                     <button

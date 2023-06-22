@@ -36,6 +36,10 @@ hr {
   opacity: 0.1 !important;
 }
 
+.dotted {
+  border-style: dotted;
+}
+
 .form-label {
   font-size: 1.125em !important;
 }
@@ -63,6 +67,10 @@ input {
 .btn-add-participant {
   border-radius: 70px !important;
   padding: 20px 34px !important;
+}
+
+.name {
+  font-size: 1.125em !important;
 }
 
 .btn-submit {
