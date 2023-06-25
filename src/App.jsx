@@ -1,30 +1,13 @@
 import "./App.css";
+import { useState } from "react";
 import Card from "./components/card";
+import { useEffect } from "react";
 
 function App() {
-  const participants = [
-    {
-      id: 0,
-      name: "john",
-      email: "john@wp.en",
-      phone: "+4511223344",
-      birthdate: "01011990",
-    },
-    {
-      id: 1,
-      name: "adam",
-      email: "adam@wp.en",
-      phone: "+4555667788",
-      birthdate: "02011990",
-    },
-  ];
-
   ("use strict");
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
   const forms = document.querySelectorAll(".needs-validation");
 
-  // Loop over them and prevent submission
   Array.from(forms).forEach((form) => {
     form.addEventListener(
       "submit",
@@ -33,12 +16,28 @@ function App() {
           event.preventDefault();
           event.stopPropagation();
         }
-
         form.classList.add("was-validated");
       },
       false
     );
   });
+
+  const [participant, setInputs] = useState({});
+  const [participants, setParticipants] = useState([]);
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs((values) => ({ ...values, [name]: value }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const newParticipant = participant;
+    newParticipant.id = participants.length;
+    setInputs({});
+    setParticipants((previousState) => [...previousState, newParticipant]);
+  };
 
   return (
     <>
@@ -70,7 +69,11 @@ function App() {
                   </div>
                 </div>
                 <hr className="m-0 dotted" />
-                <form className="px-5 pt-4 pb-5 needs-validation" noValidate>
+                <form
+                  className="px-5 pt-4 pb-5 needs-validation"
+                  noValidate
+                  onSubmit={handleSubmit}
+                >
                   <div className="mb-4">
                     <label
                       for="nameFormControl"
@@ -83,6 +86,9 @@ function App() {
                       className="form-control"
                       id="nameFormControl"
                       placeholder="Full name"
+                      name="name"
+                      value={participant.name || ""}
+                      onChange={handleChange}
                       required
                     />
                     <div className="invalid-feedback">Please enter name.</div>
@@ -99,6 +105,9 @@ function App() {
                       className="form-control"
                       id="emailFormControl"
                       placeholder="Email"
+                      name="email"
+                      value={participant.email || ""}
+                      onChange={handleChange}
                       required
                     />
                     <div className="invalid-feedback">Please enter email.</div>
@@ -115,6 +124,9 @@ function App() {
                       className="form-control"
                       id="phoneFormControl"
                       placeholder="Phone"
+                      name="phone"
+                      value={participant.phone || ""}
+                      onChange={handleChange}
                       pattern="[0-9]{8}"
                       required
                     />
@@ -134,6 +146,9 @@ function App() {
                       className="form-control"
                       id="birthdateFormControl"
                       placeholder="Birthdate"
+                      name="birthdate"
+                      value={participant.birthdate || ""}
+                      onChange={handleChange}
                       required
                     />
                     <div className="invalid-feedback">
@@ -158,34 +173,40 @@ function App() {
                 <hr className="m-0 dotted" />
                 <div className="h-100 d-flex flex-column fw-semibold">
                   <div className="pt-3 flex-grow-1">
-                    <span className="px-5 pt-4 pb-5 d-none">
-                      No participants added...
-                    </span>
-                    <div className="">
-                      {participants.map((participant) => (
-                        <div key={participant.id}>
-                          <div className="px-5 d-flex flex-wrap">
-                            <div className="w-100 name">{participant.name}</div>
-                            <div className="w-50 opacity-50">Birthdate:</div>
-                            <div className="w-50 opacity-50 text-end">
-                              {participant.birthdate}
+                    {participants.length > 0 && (
+                      <div className="">
+                        {participants.map((participant) => (
+                          <div key={participant.id}>
+                            <div className="px-5 d-flex flex-wrap">
+                              <div className="w-100 name">
+                                {participant.name}
+                              </div>
+                              <div className="w-50 opacity-50">Birthdate:</div>
+                              <div className="w-50 opacity-50 text-end">
+                                {participant.birthdate}
+                              </div>
+                              <div className="w-50 opacity-50">Email:</div>
+                              <div className="w-50 opacity-50 text-end">
+                                {participant.email}
+                              </div>
+                              <div className="w-50 opacity-50">
+                                {" "}
+                                Phone number:
+                              </div>
+                              <div className="w-50 opacity-50 text-end">
+                                {participant.phone}
+                              </div>
                             </div>
-                            <div className="w-50 opacity-50">Email:</div>
-                            <div className="w-50 opacity-50 text-end">
-                              {participant.email}
-                            </div>
-                            <div className="w-50 opacity-50">
-                              {" "}
-                              Phone number:
-                            </div>
-                            <div className="w-50 opacity-50 text-end">
-                              {participant.phone}
-                            </div>
+                            <hr></hr>
                           </div>
-                          <hr></hr>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
+                    {participants.length == 0 && (
+                      <span className="px-5 pt-4 pb-5">
+                        No participants added...
+                      </span>
+                    )}
                   </div>
                   <div className="d-grid">
                     <button
