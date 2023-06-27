@@ -1,3 +1,6 @@
+![React 18.2.0.](https://img.shields.io/badge/React-18.2.0-blue")
+![Bootstrap 5.3.0.](https://img.shields.io/badge/Bootstrap-5.3.0-blue")
+
 # Orange-rabbit
 
 ### Festival signup form created using React and Bootstrap
