@@ -58,19 +58,34 @@ function App() {
     );
   };
 
-  const handleListSubmit = () => {
+  const handleListSubmit = async (event) => {
+    event.preventDefault();
     setListSubmitted(true);
     setPayload({
       main_participant: participants[0],
       sub_participants: participants.slice(1),
     });
+    await fetch("https://someapi.com/participants", {
+      method: "POST",
+      body: payload,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   useEffect(() => {
     console.log(payload);
   }, [payload]);
 
-  const handleMoreTickets = () => {
+  const handleMoreTickets = (event) => {
+    event.preventDefault();
     setListSubmitted(false);
     setParticipantsList(false);
     setParticipants([]);
