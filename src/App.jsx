@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "./components/card";
 
 function App() {
@@ -25,6 +25,8 @@ function App() {
   const [participants, setParticipants] = useState([]);
   const [maxIndex, setMaxIndex] = useState(0);
   const [participantsList, setParticipantsList] = useState(false);
+  const [listSubmitted, setListSubmitted] = useState(false);
+  const [payload, setPayload] = useState({});
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -36,6 +38,9 @@ function App() {
     event.preventDefault();
     const newParticipant = participant;
     newParticipant.id = maxIndex;
+    let date = new Date(newParticipant.birthdate);
+    newParticipant.birthdate =
+      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
     setMaxIndex(maxIndex + 1);
     setInputs({});
     setParticipants((previousState) => [...previousState, newParticipant]);
@@ -49,13 +54,33 @@ function App() {
     );
   };
 
+  const handleListSubmit = (_event) => {
+    setListSubmitted(true);
+    setPayload({
+      main_participant: participants[0],
+      sub_participants: participants.slice(1),
+    });
+  };
+
+  useEffect(() => {
+    console.log(payload);
+  }, [payload]);
+
+  const handleMoreTickets = (_event) => {
+    setListSubmitted(false);
+    setParticipantsList(false);
+    setParticipants([]);
+    setMaxIndex(0);
+    setPayload({});
+  };
+
   return (
     <>
       <div className="position-absolute min-vh-100 min-vw-100 black-fill"></div>
       <div className="position-absolute min-vh-100 min-vw-100 background-image blurred-background"></div>
       <div className="min-vh-100 min-vw-100 d-flex align-items-center">
         <div className="container-fluid">
-          <div className="">
+          {!listSubmitted && (
             <div className="row justify-content-center">
               <div className="col px-0 event-logo">
                 <img src="src\assets\danny-howe-bn-D2bCvpik-unsplash 1.png"></img>
@@ -242,6 +267,7 @@ function App() {
                           type="submit"
                           className="btn btn-submit fw-bold text-white fs-5 d-flex justify-content-between"
                           disabled={participants.length == 0}
+                          onClick={handleListSubmit}
                         >
                           <span className="align-middle">Submit</span>
                           <img
@@ -255,25 +281,28 @@ function App() {
                 </div>
               )}
             </div>
-          </div>
-          <div className="row justify-content-center d-none">
-            <div className="bg-white d-flex flex-column w-auto py-5 px-0">
-              <div className="d-flex flex-column align-items-center p-5">
-                <img src="src\assets\check.svg" className="d-flex"></img>
-                <p className="text-uppercase fw-bold text-black mt-4 mb-1 lead-title">
-                  Confirmation
-                </p>
-                <h1 className="fw-bold text-black mb-3">Signup complete</h1>
-                <p className="">We look forward seeing you at the event</p>
-                <button
-                  type="submit"
-                  className="btn btn-add-participant fw-bold text-white fs-5"
-                >
-                  <span className="align-middle">Order more tickets</span>
-                </button>
+          )}
+          {listSubmitted && (
+            <div className="row justify-content-center">
+              <div className="bg-white d-flex flex-column w-auto py-5 px-0">
+                <div className="d-flex flex-column align-items-center p-5">
+                  <img src="src\assets\check.svg" className="d-flex"></img>
+                  <p className="text-uppercase fw-bold text-black mt-4 mb-1 lead-title">
+                    Confirmation
+                  </p>
+                  <h1 className="fw-bold text-black mb-3">Signup complete</h1>
+                  <p className="">We look forward seeing you at the event</p>
+                  <button
+                    type="submit"
+                    className="btn btn-add-participant fw-bold text-white fs-5"
+                    onClick={handleMoreTickets}
+                  >
+                    <span className="align-middle">Order more tickets</span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>
