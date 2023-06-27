@@ -1,6 +1,13 @@
 import "./Card.css";
+import PropTypes from "prop-types";
 
-const Card = ({ title, heading, children }) => {
+Card.propTypes = {
+  title: PropTypes.string,
+  heading: PropTypes.string,
+  children: PropTypes.any,
+};
+
+function Card({ title, heading, children }) {
   return (
     <>
       <div className="bg-white h-100 d-flex flex-column">
@@ -14,6 +21,6 @@ const Card = ({ title, heading, children }) => {
       </div>
     </>
   );
-};
+}
 
 export default Card;
