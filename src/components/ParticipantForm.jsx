@@ -1,17 +1,35 @@
 import PropTypes from "prop-types";
+import { useRef, useState } from "react";
 
 ParticipantForm.propTypes = {
-  handleSubmit: PropTypes.func,
+  onSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   participant: PropTypes.object,
 };
 
-function ParticipantForm({ handleSubmit, handleChange, participant }) {
+function ParticipantForm({ onSubmit, handleChange, participant }) {
+  const formRef = useRef();
+  const [isInvalid, setIsInvalid] = useState(false);
+
+  const handleSubmit = (event) => {
+    if (formRef.current) {
+      if (formRef.current.checkValidity()) {
+        onSubmit(event);
+        setIsInvalid(false);
+      } else {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsInvalid(true);
+      }
+    }
+  };
   return (
     <>
       <form
-        className="px-5 pt-4 pb-5 needs-validation"
-        id="signupForm"
+        ref={formRef}
+        className={`px-5 pt-4 pb-5 needs-validation ${
+          isInvalid ? "was-validated" : null
+        }`}
         noValidate
         onSubmit={handleSubmit}
       >

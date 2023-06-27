@@ -7,24 +7,6 @@ import EventDetails from "./components/EventDetails";
 import ParticipantsSubmitted from "./components/ParticipantsSubmitted";
 
 function App() {
-  ("use strict");
-
-  const forms = document.querySelectorAll(".needs-validation");
-
-  Array.from(forms).forEach((form) => {
-    form.addEventListener(
-      "submit",
-      (event) => {
-        if (!form.checkValidity()) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add("was-validated");
-      },
-      false
-    );
-  });
-
   const [participant, setInputs] = useState({});
   const [participants, setParticipants] = useState([]);
   const [maxIndex, setMaxIndex] = useState(0);
@@ -40,6 +22,7 @@ function App() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    event.stopPropagation();
     const newParticipant = participant;
     newParticipant.id = maxIndex;
     let date = new Date(newParticipant.birthdate);
@@ -48,7 +31,6 @@ function App() {
     setMaxIndex(maxIndex + 1);
     setInputs({});
     setParticipants((previousState) => [...previousState, newParticipant]);
-    document.getElementById("signupForm").classList.remove("was-validated");
     setParticipantsList(true);
   };
 
@@ -115,7 +97,7 @@ function App() {
                   />
                   <hr className="m-0 dotted" />
                   <ParticipantForm
-                    handleSubmit={handleSubmit}
+                    onSubmit={handleSubmit}
                     handleChange={handleChange}
                     participant={participant}
                   />
